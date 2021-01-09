@@ -1,3 +1,8 @@
+/* @Author
+Student Name: <Muhammet Derviş Kopuz>
+Student ID : <504201531>
+Date: <13/01/2021> */
+
 #include <iostream>
 #include "data_structs.h"
 
@@ -91,21 +96,22 @@ void Queue::queue(Process* in) {
 Process* Queue::dequeue() {
 
   Process* process;
-  Process* temp;
+  Process temp;
 
   process = head;
   head = head->next;
   if (head == NULL)
     tail = NULL;
-  
-  temp->name = process->name;
-  temp->arrival_time = process->arrival_time;
-  temp->deadline = process->deadline;
-  temp->task_count = process->task_count;
-  temp->priority = process->priority;
-  temp->task_stack = process->task_stack;
+  /*
+  temp.name = process->name;
+  temp.arrival_time = process->arrival_time;
+  temp.deadline = process->deadline;
+  temp.task_count = process->task_count;
+  temp.priority = process->priority;
+  temp.task_stack = process->task_stack;
   delete process;
-  return temp;
+  */
+  return process;
   
 }
 
@@ -114,5 +120,34 @@ bool Queue::isEmpty() {
 }
 
 Process* Queue::front() {
+  return (head);  
+}
+
+void MultiQueue::init() {
+
+  queues[0].init();
+  queues[1].init();
+  queues[2].init();
+
+}
+/*
+void MultiQueue::close() {
   
 }
+
+void MultiQueue::queue(Process* in) {
+  
+}
+
+Process* MultiQueue::dequeue(int priority) {
+  
+}
+
+bool MultiQueue::isEmpty() {
+  
+}
+
+Process* MultiQueue::front(int priority) {
+  
+}
+*/

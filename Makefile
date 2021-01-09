@@ -6,7 +6,7 @@ SRC     := src
 INCLUDE := include
 
 LIBRARIES   :=
-EXECUTABLE  := main.exe
+EXECUTABLE  := scheduler.exe
 
 
 all: $(BIN)/$(EXECUTABLE)

@@ -1,3 +1,8 @@
+/* @Author
+Student Name: <Muhammet Derviş Kopuz>
+Student ID : <504201531>
+Date: <13/01/2021> */
+
 #pragma once
 #include <iostream>
 #include <stdlib.h>
