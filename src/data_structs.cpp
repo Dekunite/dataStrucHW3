@@ -208,4 +208,5 @@ Process* MultiQueue::front(int priority) {
     process = queues[2].front();
   }
 
+  return process;
 }
