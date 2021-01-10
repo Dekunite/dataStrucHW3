@@ -132,11 +132,15 @@ void MultiQueue::init() {
   queues[2].init();
 
 }
-/*
+
 void MultiQueue::close() {
   
+  queues[0].close();
+  queues[1].close();
+  queues[2].close();
+
 }
-*/
+
 
 void MultiQueue::queue(Process* in) {
   
@@ -188,8 +192,20 @@ bool MultiQueue::isEmpty() {
   }
 }
 
-/*
+
 Process* MultiQueue::front(int priority) {
   
+  Process* process;
+  
+  if (priority == 1)
+  {
+    process = queues[0].front();
+  } else if (priority == 2)
+  {
+    process = queues[1].front();
+  } else if (priority == 3)
+  {
+    process = queues[2].front();
+  }
+
 }
-*/

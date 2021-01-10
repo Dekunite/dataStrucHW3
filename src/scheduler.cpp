@@ -200,6 +200,7 @@ int main(int argc, char* argv[])
   
 
   cout<<"Cumulative Lateness: "<<lateness<<endl;
+  multiqueue->close();
   getchar();
 
 }
