@@ -36,14 +36,16 @@ void Stack::push(Subtask* in) {
 Subtask* Stack::pop() {
 
   Subtask* topSubtask;
-  Subtask* temp;
+  //Subtask* temp;
   topSubtask = head;
   head = head->next;
   //temp = topSubtask olur mu?
+  /*
   temp->name = topSubtask->name;
   temp->name = topSubtask->duration;
   delete topSubtask;
-  return temp;
+  */
+  return topSubtask;
   
 }
 
@@ -96,7 +98,7 @@ void Queue::queue(Process* in) {
 Process* Queue::dequeue() {
 
   Process* process;
-  Process temp;
+  //Process temp;
 
   process = head;
   head = head->next;
@@ -134,19 +136,59 @@ void MultiQueue::init() {
 void MultiQueue::close() {
   
 }
+*/
 
 void MultiQueue::queue(Process* in) {
   
-}
+  Process* newProcess = new Process;
+  newProcess->name = in->name;
+  newProcess->arrival_time = in->arrival_time;
+  newProcess->deadline = in->deadline;
+  newProcess->task_count = in->task_count;
+  newProcess->priority = in->priority;
+  newProcess->task_stack = in->task_stack;
+  newProcess->next = NULL;
 
+  if (newProcess->priority == 1)
+  {
+    queues[0].queue(newProcess);
+  } else if (newProcess->priority == 2)
+  {
+    queues[1].queue(newProcess);
+  } else if (newProcess->priority == 3)
+  {
+    queues[2].queue(newProcess);
+  }
+}
 Process* MultiQueue::dequeue(int priority) {
   
+  Process* process;
+
+  if (priority == 1)
+  {
+    process = queues[0].dequeue();
+  } else if (priority == 2)
+  {
+    process = queues[1].dequeue();
+  } else if (priority == 3)
+  {
+    process = queues[2].dequeue();
+  }
+
+  return process;  
 }
 
 bool MultiQueue::isEmpty() {
-  
+  if (queues[0].isEmpty() && queues[1].isEmpty() && queues[2].isEmpty())
+  {
+    return true;
+  } else
+  {
+    return false;
+  }
 }
 
+/*
 Process* MultiQueue::front(int priority) {
   
 }
