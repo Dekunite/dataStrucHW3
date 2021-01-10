@@ -89,8 +89,7 @@ int main(int argc, char* argv[])
   int specialCondCounter = 0;
   int lateness = 0;
 
-  while (!inputQueue.isEmpty() || !multiqueue->queues[0].isEmpty() ||
-  !multiqueue->queues[1].isEmpty() || !multiqueue->queues[2].isEmpty())
+  while (!inputQueue.isEmpty() || !multiqueue->isEmpty())
   {
     if(!inputQueue.isEmpty())
     {
