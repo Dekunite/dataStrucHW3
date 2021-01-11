@@ -34,15 +34,25 @@ int main(int argc, char* argv[])
   newProcess->task_stack.init();
   Queue inputQueue;
   inputQueue.init();
-  while(getline(file, line)) {
-
-    //cout<<line<<endl;
-    istringstream iss(line);
-    //cout<<line<<endl;
-    //getline(file,line);
-    //cout<<line<<endl;
+  //while(getline(file, line)) {
+  while(file>>firstInput) {
+    
+    if (firstInput.length() >4 )
+    {
+      linesRead = 1;
+      file >> secondInput;
+      inputQueue.queue(newProcess);
+      newProcess->task_stack.init();
+      newProcess->name = firstInput;
+      newProcess->priority = secondInput;
+      continue;
+    } 
+    file >> secondInput;
+    
+  
+    /*
+    stringstream iss(line);
     iss >> firstInput >> secondInput;
-    //cout<<processName<<"  "<< priority<<endl;
     
     if (line == "")
     {
@@ -51,6 +61,7 @@ int main(int argc, char* argv[])
       newProcess->task_stack.init();
       continue;
     }
+    */
   
     if (linesRead == 0)
     {
@@ -129,7 +140,7 @@ int main(int argc, char* argv[])
       }
       
     } else if (!multiqueue->queues[1].isEmpty() && 
-    (specialCondCounter == 0 || specialCondCounter == 1))
+    specialCondCounter != 2)
     //priority 2
     {
       Process* currentProcess = multiqueue->queues[1].front();
@@ -148,7 +159,7 @@ int main(int argc, char* argv[])
       specialCondCounter++;
       if (specialCondCounter == 2 && multiqueue->queues[2].isEmpty())
       {
-        specialCondCounter == 0;
+        specialCondCounter = 0;
       }
 
     } else if (!multiqueue->queues[2].isEmpty() && specialCondCounter == 2)
@@ -187,20 +198,11 @@ int main(int argc, char* argv[])
       }
     }
     
-    
-    
-    
 
-
-
-    
-    
-    //cout<<"sa"<<endl;
   }
   
 
   cout<<"Cumulative Lateness: "<<lateness<<endl;
   multiqueue->close();
-  getchar();
-
+  return EXIT_SUCCESS;
 }
