@@ -83,12 +83,9 @@ int main(int argc, char* argv[])
       newProcess->deadline += newSubtask->duration;
 
       newProcess->task_stack.push(newSubtask);
-      //cout<<newProcess->task_stack.head->name<<endl;
     }
     linesRead++;
     
-    
-
   }
   inputQueue.queue(newProcess); //push last process
   delete newProcess;
@@ -105,21 +102,21 @@ int main(int argc, char* argv[])
     if(!inputQueue.isEmpty())
     {
       Process* front= inputQueue.front();
-        if (front->arrival_time <= time)
-        {
-          //Add to multiqueue
-          Process* process = inputQueue.dequeue();
-          multiqueue->queue(process);
+      if (front->arrival_time <= time)
+      {
+        //Add to multiqueue
+        Process* process = inputQueue.dequeue();
+        multiqueue->queue(process);
 
-          if (!inputQueue.isEmpty())
+        if (!inputQueue.isEmpty())
+        {
+          Process* nextFront = inputQueue.front();
+          if (nextFront->arrival_time <= time)
           {
-            Process* nextFront = inputQueue.front();
-            if (nextFront->arrival_time <= time)
-            {
-              continue;
-            }
+            continue;
           }
         }
+      }
     }
 
     //scheduler for multiqueue
@@ -139,8 +136,24 @@ int main(int argc, char* argv[])
         multiqueue->dequeue(1);
       }
       
-    } else if (!multiqueue->queues[1].isEmpty() && 
-    specialCondCounter != 2)
+    } else if (!multiqueue->queues[2].isEmpty() && specialCondCounter == 2)
+    //priority 3 & cond active
+    {
+      Process* currentProcess = multiqueue->queues[2].front();
+      Subtask* currentSubtask = currentProcess->task_stack.pop();
+
+      time += currentSubtask->duration;
+      cout<<currentProcess->name<<" "<<currentSubtask->name<<endl;
+
+      //task stack boşaldıysa processi uçur
+      if (currentProcess->task_stack.isEmpty())
+      {
+        lateness += time - currentProcess->deadline;
+        multiqueue->dequeue(3);
+      }
+      specialCondCounter = 0;
+
+    } else if (!multiqueue->queues[1].isEmpty())
     //priority 2
     {
       Process* currentProcess = multiqueue->queues[1].front();
@@ -162,7 +175,7 @@ int main(int argc, char* argv[])
         specialCondCounter = 0;
       }
 
-    } else if (!multiqueue->queues[2].isEmpty() && specialCondCounter == 2)
+    } else if (!multiqueue->queues[2].isEmpty())
     //priority 3
     {
       Process* currentProcess = multiqueue->queues[2].front();
@@ -179,30 +192,11 @@ int main(int argc, char* argv[])
       }
       specialCondCounter = 0;
     }
-
-    //sadece 3.queue kalma durumu
-    if (multiqueue->queues[0].isEmpty() && multiqueue->queues[1].isEmpty()
-    && !multiqueue->queues[2].isEmpty())
-    {
-      Process* currentProcess = multiqueue->queues[2].front();
-      Subtask* currentSubtask = currentProcess->task_stack.pop();
-
-      time += currentSubtask->duration;
-      cout<<currentProcess->name<<" "<<currentSubtask->name<<endl;
-
-      //task stack boşaldıysa processi uçur
-      if (currentProcess->task_stack.isEmpty())
-      {
-        lateness += time - currentProcess->deadline;
-        multiqueue->dequeue(3);
-      }
-    }
     
-
   }
   
-
   cout<<"Cumulative Lateness: "<<lateness<<endl;
   multiqueue->close();
   return EXIT_SUCCESS;
+  
 }
