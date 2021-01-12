@@ -36,15 +36,8 @@ void Stack::push(Subtask* in) {
 Subtask* Stack::pop() {
 
   Subtask* topSubtask;
-  //Subtask* temp;
   topSubtask = head;
   head = head->next;
-  //temp = topSubtask olur mu?
-  /*
-  temp->name = topSubtask->name;
-  temp->name = topSubtask->duration;
-  delete topSubtask;
-  */
   return topSubtask;
   
 }
@@ -98,21 +91,12 @@ void Queue::queue(Process* in) {
 Process* Queue::dequeue() {
 
   Process* process;
-  //Process temp;
 
   process = head;
   head = head->next;
   if (head == NULL)
     tail = NULL;
-  /*
-  temp.name = process->name;
-  temp.arrival_time = process->arrival_time;
-  temp.deadline = process->deadline;
-  temp.task_count = process->task_count;
-  temp.priority = process->priority;
-  temp.task_stack = process->task_stack;
-  delete process;
-  */
+
   return process;
   
 }

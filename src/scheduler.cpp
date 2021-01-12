@@ -7,7 +7,6 @@ Date: <13/01/2021> */
 #include<stdio.h>
 #include<iostream>
 #include<stdlib.h>
-#include <sstream>
 
 #include "data_structs.h"
 
@@ -15,8 +14,8 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-  const char* filename = "data.txt";
-  //const char* filename = argv[1];
+  //const char* filename = "data.txt";
+  const char* filename = argv[1];
 
   ifstream file(filename);
 
@@ -29,40 +28,14 @@ int main(int argc, char* argv[])
   string firstInput;
   int secondInput;
   int linesRead = 0;
-  string line;
+  int taskCount = 0;
+  int taskRead = 0;
   Process* newProcess = new Process;
   newProcess->task_stack.init();
   Queue inputQueue;
   inputQueue.init();
-  //while(getline(file, line)) {
-  while(file>>firstInput) {
+  while(file >> firstInput >> secondInput) {
     
-    if (firstInput.length() >4 )
-    {
-      linesRead = 1;
-      file >> secondInput;
-      inputQueue.queue(newProcess);
-      newProcess->task_stack.init();
-      newProcess->name = firstInput;
-      newProcess->priority = secondInput;
-      continue;
-    } 
-    file >> secondInput;
-    
-  
-    /*
-    stringstream iss(line);
-    iss >> firstInput >> secondInput;
-    
-    if (line == "")
-    {
-      linesRead = 0;
-      inputQueue.queue(newProcess);
-      newProcess->task_stack.init();
-      continue;
-    }
-    */
-  
     if (linesRead == 0)
     {
       newProcess->name = firstInput;
@@ -71,6 +44,7 @@ int main(int argc, char* argv[])
     {
       newProcess->arrival_time = stoi(firstInput);
       newProcess->task_count = secondInput;
+      taskCount = secondInput;
 
       newProcess->deadline = newProcess->arrival_time;
     } else
@@ -79,15 +53,25 @@ int main(int argc, char* argv[])
       newSubtask->name = firstInput;
       newSubtask->duration = secondInput;
       newSubtask->next = NULL;
+      taskRead++;
 
       newProcess->deadline += newSubtask->duration;
 
       newProcess->task_stack.push(newSubtask);
+      delete newSubtask;
     }
     linesRead++;
+  
+    if (taskRead == taskCount && !taskRead==0 && !taskCount==0)
+    {
+      linesRead = 0;
+      taskCount = 0;
+      taskRead = 0;
+      inputQueue.queue(newProcess);
+      newProcess->task_stack.init();
+    }
     
   }
-  inputQueue.queue(newProcess); //push last process
   delete newProcess;
 
   //multiqueue
@@ -107,6 +91,7 @@ int main(int argc, char* argv[])
         //Add to multiqueue
         Process* process = inputQueue.dequeue();
         multiqueue->queue(process);
+        delete process;
 
         if (!inputQueue.isEmpty())
         {
@@ -133,8 +118,9 @@ int main(int argc, char* argv[])
       if (currentProcess->task_stack.isEmpty())
       {
         lateness += time - currentProcess->deadline;
-        multiqueue->dequeue(1);
+        delete multiqueue->dequeue(1);
       }
+      delete currentSubtask;
       
     } else if (!multiqueue->queues[2].isEmpty() && specialCondCounter == 2)
     //priority 3 & cond active
@@ -149,9 +135,10 @@ int main(int argc, char* argv[])
       if (currentProcess->task_stack.isEmpty())
       {
         lateness += time - currentProcess->deadline;
-        multiqueue->dequeue(3);
+        delete multiqueue->dequeue(3);
       }
       specialCondCounter = 0;
+      delete currentSubtask;
 
     } else if (!multiqueue->queues[1].isEmpty())
     //priority 2
@@ -166,8 +153,9 @@ int main(int argc, char* argv[])
       if (currentProcess->task_stack.isEmpty())
       {
         lateness += time - currentProcess->deadline;
-        multiqueue->dequeue(2);
+        delete multiqueue->dequeue(2);
       }
+      delete currentSubtask;
       
       specialCondCounter++;
       if (specialCondCounter == 2 && multiqueue->queues[2].isEmpty())
@@ -188,15 +176,21 @@ int main(int argc, char* argv[])
       if (currentProcess->task_stack.isEmpty())
       {
         lateness += time - currentProcess->deadline;
-        multiqueue->dequeue(3);
+        delete multiqueue->dequeue(3);
       }
       specialCondCounter = 0;
+      delete currentSubtask;
+
+    } else
+    {
+      time++;
     }
-    
+     
   }
   
   cout<<"Cumulative Lateness: "<<lateness<<endl;
   multiqueue->close();
+  delete multiqueue;
   return EXIT_SUCCESS;
   
 }
