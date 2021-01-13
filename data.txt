@@ -1,21 +1,17 @@
 process1 2
-0 3
-A 6
-B 9
-C 15
+0 1
+A 3
 
-process3 1
-7 1
+process2 2
+2 1
+A 3
+
+process3 2
+5 1
 A 5
 
 process4 3
-80 3
-A 6
-B 9
-C 5
+5 1
+A 5
 
-process5 2
-80 3
-A 6
-B 9
-C 2
+

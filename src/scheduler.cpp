@@ -104,6 +104,11 @@ int main(int argc, char* argv[])
       }
     }
 
+    if (specialCondCounter == 2 && multiqueue->queues[2].isEmpty())
+    {
+      specialCondCounter = 0;
+    }
+
     //scheduler for multiqueue
     //priority 1
     if (!multiqueue->queues[0].isEmpty())
@@ -158,10 +163,6 @@ int main(int argc, char* argv[])
       delete currentSubtask;
       
       specialCondCounter++;
-      if (specialCondCounter == 2 && multiqueue->queues[2].isEmpty())
-      {
-        specialCondCounter = 0;
-      }
 
     } else if (!multiqueue->queues[2].isEmpty())
     //priority 3
